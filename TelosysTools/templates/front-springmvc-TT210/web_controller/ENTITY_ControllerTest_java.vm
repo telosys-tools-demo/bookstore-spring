@@ -1,0 +1,482 @@
+#set( $uncapitalizedEntityName = $fn.uncapitalize($entity.name) )
+#if( $entity.hasCompositePrimaryKey() )
+#set( $entityKeyType = ${entity.name} + "EntityKey" )
+#set( $entityKeyName = $fn.uncapitalize($entity.name) + "EntityKey" )
+#else
+#set( $entityKeyType = ${entity.keyAttributes[0].formattedType(0)} )
+#set( $entityKeyName = ${entity.keyAttributes[0].formattedName(0)} )
+#end
+## --- Primary Key arguments by getters, e.g. "review.getCustomerCode(), review.get${entity.name}Id()"
+#set( $pkElementsGetters = $fn.argumentsListWithGetter($uncapitalizedEntityName, $entity.keyAttributes) )
+## --- Primary Key arguments, e.g. "customerCode, ${fn.uncapitalize($entity.name)}Id"
+#set( $pkElementsVariables = $fn.argumentsList($entity.keyAttributes) )
+## --- Primary Key request path, e.g. "{customerCode}/{${fn.uncapitalize($entity.name)}Id}"
+#set( $pkPath = "" )
+#foreach( $attribute in $entity.keyAttributes )
+#if( $foreach.count > 1 )
+#set( $pkPath = "${pkPath}/" )
+#end
+#set( $pkPath = "${pkPath}{${attribute.name}}" )
+#end
+## --- Primary Key Path Variables, e.g. "@PathVariable("customerCode") String customerCode, @PathVariable("${fn.uncapitalize($entity.name)}Id") Integer ${fn.uncapitalize($entity.name)}Id"
+#set( $pkPathVariables = "" )
+#foreach( $attribute in $entity.keyAttributes )
+#if( $foreach.count > 1 )
+#set( $pkPathVariables = "${pkPathVariables}, " )
+#end
+#set( $pkPathVariables = "${pkPathVariables}@PathVariable(${QUOT}${attribute.name}${QUOT}) $attribute.type $attribute.name" )
+#end
+## // ${DOLLAR}pkPath          = "$pkPath"
+## // ${DOLLAR}pkPathVariables = "$pkPathVariables"
+##
+## --- Referenced entities (e.g. "${entity.name}", "Country", "Author", ... )
+#set( $referencedEntities = $entity.referencedEntityTypes() )## All referenced entities (PK and NON PK)
+#set( $referencedNonPKEntities = $entity.referencedEntityTypes($entity.nonKeyAttributes) )## Entities referenced by NON PK fields
+## -----------------------------------------------------------------------------------------------------------------------------
+package ${target.javaPackageFromFolder($TEST_SRC)};
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+//--- Entities
+import ${ENTITY_PKG}.${entity.name};
+#foreach( $ref in $referencedEntities )
+#if ( $ref != ${entity.name} )## to avoid multiple imports for the same entity
+import ${ENTITY_PKG}.$ref;
+#end
+#end
+import ${ROOT_PKG}.test.${entity.name}FactoryForTest;
+#foreach( $ref in $referencedEntities )
+#if ( $ref != ${entity.name} )
+import ${ROOT_PKG}.test.${ref}FactoryForTest;
+#end
+#end
+
+//--- Services 
+import ${ROOT_PKG}.business.service.${entity.name}Service;
+#foreach( $ref in $referencedEntities )
+#if ( $ref != ${entity.name} )## to avoid multiple imports for the same service
+import ${ROOT_PKG}.business.service.${ref}Service;
+#end
+#end
+
+#if ( $referencedEntities.size() > 0 )
+//--- List Items 
+#end
+#foreach( $ref in $referencedEntities )
+import ${ROOT_PKG}.web.listitem.${ref}ListItem;
+#end
+
+import ${ROOT_PKG}.web.common.Message;
+import ${ROOT_PKG}.web.common.MessageHelper;
+import ${ROOT_PKG}.web.common.MessageType;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.context.MessageSource;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@RunWith(MockitoJUnitRunner.class)
+public class ${entity.name}ControllerTest {
+	
+	@InjectMocks
+	private ${entity.name}Controller ${fn.uncapitalize($entity.name)}Controller;
+	@Mock
+	private ${entity.name}Service ${fn.uncapitalize($entity.name)}Service;
+	@Mock
+	private MessageHelper messageHelper;
+	@Mock
+	private MessageSource messageSource;
+#foreach( $ref in $referencedEntities )
+#if ( $ref != ${entity.name} )## to avoid multiple declarations for the same service
+	@Mock
+	private ${ref}Service ${fn.uncapitalize(${ref})}Service; // Injected by Spring
+#end
+#end
+
+	private ${entity.name}FactoryForTest ${fn.uncapitalize($entity.name)}FactoryForTest = new ${entity.name}FactoryForTest();
+#foreach( $ref in $referencedEntities )
+	private ${ref}FactoryForTest ${fn.uncapitalize($ref)}FactoryForTest = new ${ref}FactoryForTest();
+#end
+
+#foreach( $ref in $referencedEntities )
+	List<${ref}> ${fn.uncapitalize(${ref})}s = new ArrayList<${ref}>();
+#end
+
+	private void givenPopulateModel() {
+#foreach( $ref in $referencedEntities )
+		${ref} ${fn.uncapitalize(${ref})}1 = ${fn.uncapitalize($ref)}FactoryForTest.new${ref}();
+		${ref} ${fn.uncapitalize(${ref})}2 = ${fn.uncapitalize($ref)}FactoryForTest.new${ref}();
+		List<${ref}> ${fn.uncapitalize(${ref})}s = new ArrayList<${ref}>();
+		${fn.uncapitalize(${ref})}s.add(${fn.uncapitalize(${ref})}1);
+		${fn.uncapitalize(${ref})}s.add(${fn.uncapitalize(${ref})}2);
+		when(${fn.uncapitalize(${ref})}Service.findAll()).thenReturn(${fn.uncapitalize(${ref})}s);
+
+#end
+	}
+
+	@Test
+	public void list() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		List<${entity.name}> list = new ArrayList<${entity.name}>();
+		when(${fn.uncapitalize($entity.name)}Service.findAll()).thenReturn(list);
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.list(model);
+		
+		// Then
+		assertEquals("${fn.uncapitalize($entity.name)}/list", viewName);
+		Map<String,?> modelMap = model.asMap();
+		assertEquals(list, modelMap.get("list"));
+	}
+	
+	@Test
+	public void formForCreate() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		givenPopulateModel();
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.formForCreate(model);
+		
+		// Then
+		assertEquals("${fn.uncapitalize($entity.name)}/form", viewName);
+		
+		Map<String,?> modelMap = model.asMap();
+		
+#foreach( $attr in $entity.keyAttributes )
+		assertNull(((${entity.name})modelMap.get("${fn.uncapitalize($entity.name)}")).${attr.getter}());
+#end
+		assertEquals("create", modelMap.get("mode"));
+		assertEquals("/${fn.uncapitalize($entity.name)}/create", modelMap.get("saveAction"));
+		
+#foreach( $ref in $referencedEntities )
+		@SuppressWarnings("unchecked")
+		List<${ref}ListItem> ${fn.uncapitalize(${ref})}ListItems = (List<${ref}ListItem>) modelMap.get("listOf${ref}Items");
+		assertEquals(2, ${fn.uncapitalize(${ref})}ListItems.size());
+		
+#end
+	}
+	
+	@Test
+	public void formForUpdate() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		givenPopulateModel();
+		
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+#foreach( $attr in $entity.keyAttributes )
+		${attr.type} ${attr.name} = ${fn.uncapitalize($entity.name)}.${attr.getter}();
+#end
+		when(${fn.uncapitalize($entity.name)}Service.findById(${pkElementsVariables})).thenReturn(${fn.uncapitalize($entity.name)});
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.formForUpdate(model, ${pkElementsVariables});
+		
+		// Then
+		assertEquals("${fn.uncapitalize($entity.name)}/form", viewName);
+		
+		Map<String,?> modelMap = model.asMap();
+		
+		assertEquals(${fn.uncapitalize($entity.name)}, (${entity.name}) modelMap.get("${fn.uncapitalize($entity.name)}"));
+		assertEquals("update", modelMap.get("mode"));
+		assertEquals("/${fn.uncapitalize($entity.name)}/update", modelMap.get("saveAction"));
+		
+#foreach( $ref in $referencedNonPKEntities )
+		List<${ref}ListItem> ${fn.uncapitalize(${ref})}ListItems = (List<${ref}ListItem>) modelMap.get("listOf${ref}Items");
+		assertEquals(2, ${fn.uncapitalize(${ref})}ListItems.size());
+		
+#end
+	}
+	
+	@Test
+	public void createOk() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+		BindingResult bindingResult = mock(BindingResult.class);
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+		
+		${entity.name} ${fn.uncapitalize($entity.name)}Created = new ${entity.name}();
+		when(${fn.uncapitalize($entity.name)}Service.create(${fn.uncapitalize($entity.name)})).thenReturn(${fn.uncapitalize($entity.name)}Created); 
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.create(${fn.uncapitalize($entity.name)}, bindingResult, model, redirectAttributes, httpServletRequest);
+		
+		// Then
+#set( $path = "" )
+#set( $isFirst = true )
+#foreach($attribute in $entity.keyAttributes)
+#if( $isFirst )
+#set( $isFirst = false )
+#else
+#set( $path = $path + '+"/"' )
+#end
+#set( $path = $path + "+"+${fn.uncapitalize($entity.name)}+"."+${attribute.getter}+"()" )
+#end
+		assertEquals("redirect:/${fn.uncapitalize($entity.name)}/form/"$path, viewName);
+
+		Map<String,?> modelMap = model.asMap();
+		
+		assertEquals(${fn.uncapitalize($entity.name)}Created, (${entity.name}) modelMap.get("${fn.uncapitalize($entity.name)}"));
+		assertEquals(null, modelMap.get("mode"));
+		assertEquals(null, modelMap.get("saveAction"));
+		
+		Mockito.verify(messageHelper).addMessage(redirectAttributes, new Message(MessageType.SUCCESS,"save.ok"));
+	}
+
+	@Test
+	public void createBindingResultErrors() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		givenPopulateModel();
+		
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+		BindingResult bindingResult = mock(BindingResult.class);
+		when(bindingResult.hasErrors()).thenReturn(true);
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.create(${fn.uncapitalize($entity.name)}, bindingResult, model, redirectAttributes, httpServletRequest);
+		
+		// Then
+		assertEquals("${fn.uncapitalize($entity.name)}/form", viewName);
+
+		Map<String,?> modelMap = model.asMap();
+		
+		assertEquals(${fn.uncapitalize($entity.name)}, (${entity.name}) modelMap.get("${fn.uncapitalize($entity.name)}"));
+		assertEquals("create", modelMap.get("mode"));
+		assertEquals("/${fn.uncapitalize($entity.name)}/create", modelMap.get("saveAction"));
+		
+#foreach( $ref in $referencedEntities )
+		@SuppressWarnings("unchecked")
+		List<${ref}ListItem> ${fn.uncapitalize(${ref})}ListItems = (List<${ref}ListItem>) modelMap.get("listOf${ref}Items");
+		assertEquals(2, ${fn.uncapitalize(${ref})}ListItems.size());
+		
+#end
+	}
+
+	@Test
+	public void createException() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		givenPopulateModel();
+		
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+		BindingResult bindingResult = mock(BindingResult.class);
+		when(bindingResult.hasErrors()).thenReturn(false);
+
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+		
+		Exception exception = new RuntimeException("test exception");
+		when(${fn.uncapitalize($entity.name)}Service.create(${fn.uncapitalize($entity.name)})).thenThrow(exception);
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.create(${fn.uncapitalize($entity.name)}, bindingResult, model, redirectAttributes, httpServletRequest);
+		
+		// Then
+		assertEquals("${fn.uncapitalize($entity.name)}/form", viewName);
+
+		Map<String,?> modelMap = model.asMap();
+		
+		assertEquals(${fn.uncapitalize($entity.name)}, (${entity.name}) modelMap.get("${fn.uncapitalize($entity.name)}"));
+		assertEquals("create", modelMap.get("mode"));
+		assertEquals("/${fn.uncapitalize($entity.name)}/create", modelMap.get("saveAction"));
+		
+		Mockito.verify(messageHelper).addException(model, "${fn.uncapitalize($entity.name)}.error.create", exception);
+		
+#foreach( $ref in $referencedEntities )
+		@SuppressWarnings("unchecked")
+		List<${ref}ListItem> ${fn.uncapitalize(${ref})}ListItems = (List<${ref}ListItem>) modelMap.get("listOf${ref}Items");
+		assertEquals(2, ${fn.uncapitalize(${ref})}ListItems.size());
+		
+#end
+	}
+
+	@Test
+	public void updateOk() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+#foreach( $attr in $entity.keyAttributes )
+		${attr.type} ${attr.name} = ${fn.uncapitalize($entity.name)}.${attr.getter}();
+#end
+
+		BindingResult bindingResult = mock(BindingResult.class);
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+		
+		${entity.name} ${fn.uncapitalize($entity.name)}Saved = new ${entity.name}();
+#foreach( $attr in $entity.keyAttributes )
+		${fn.uncapitalize($entity.name)}Saved.${attr.setter}(${attr.name});
+#end
+		when(${fn.uncapitalize($entity.name)}Service.update(${fn.uncapitalize($entity.name)})).thenReturn(${fn.uncapitalize($entity.name)}Saved); 
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.update(${fn.uncapitalize($entity.name)}, bindingResult, model, redirectAttributes, httpServletRequest);
+		
+		// Then
+#set( $path = "" )
+#set( $isFirst = true )
+#foreach($attribute in $entity.keyAttributes)
+#if( $isFirst )
+#set( $isFirst = false )
+#else
+#set( $path = $path + '+"/"' )
+#end
+#set( $path = $path + "+"+${fn.uncapitalize($entity.name)}+"."+${attribute.getter}+"()" )
+#end
+		assertEquals("redirect:/${fn.uncapitalize($entity.name)}/form/"$path, viewName);
+
+		Map<String,?> modelMap = model.asMap();
+		
+		assertEquals(${fn.uncapitalize($entity.name)}Saved, (${entity.name}) modelMap.get("${fn.uncapitalize($entity.name)}"));
+		assertEquals(null, modelMap.get("mode"));
+		assertEquals(null, modelMap.get("saveAction"));
+		
+		Mockito.verify(messageHelper).addMessage(redirectAttributes, new Message(MessageType.SUCCESS,"save.ok"));
+	}
+
+	@Test
+	public void updateBindingResultErrors() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		givenPopulateModel();
+		
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+		BindingResult bindingResult = mock(BindingResult.class);
+		when(bindingResult.hasErrors()).thenReturn(true);
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.update(${fn.uncapitalize($entity.name)}, bindingResult, model, redirectAttributes, httpServletRequest);
+		
+		// Then
+		assertEquals("${fn.uncapitalize($entity.name)}/form", viewName);
+
+		Map<String,?> modelMap = model.asMap();
+		
+		assertEquals(${fn.uncapitalize($entity.name)}, (${entity.name}) modelMap.get("${fn.uncapitalize($entity.name)}"));
+		assertEquals("update", modelMap.get("mode"));
+		assertEquals("/${fn.uncapitalize($entity.name)}/update", modelMap.get("saveAction"));
+		
+#foreach( $ref in $referencedNonPKEntities )
+		@SuppressWarnings("unchecked")
+		List<${ref}ListItem> ${fn.uncapitalize(${ref})}ListItems = (List<${ref}ListItem>) modelMap.get("listOf${ref}Items");
+		assertEquals(2, ${fn.uncapitalize(${ref})}ListItems.size());
+		
+#end
+	}
+
+	@Test
+	public void updateException() {
+		// Given
+		Model model = new ExtendedModelMap();
+		
+		givenPopulateModel();
+		
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+		BindingResult bindingResult = mock(BindingResult.class);
+		when(bindingResult.hasErrors()).thenReturn(false);
+
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+		
+		Exception exception = new RuntimeException("test exception");
+		when(${fn.uncapitalize($entity.name)}Service.update(${fn.uncapitalize($entity.name)})).thenThrow(exception);
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.update(${fn.uncapitalize($entity.name)}, bindingResult, model, redirectAttributes, httpServletRequest);
+		
+		// Then
+		assertEquals("${fn.uncapitalize($entity.name)}/form", viewName);
+
+		Map<String,?> modelMap = model.asMap();
+		
+		assertEquals(${fn.uncapitalize($entity.name)}, (${entity.name}) modelMap.get("${fn.uncapitalize($entity.name)}"));
+		assertEquals("update", modelMap.get("mode"));
+		assertEquals("/${fn.uncapitalize($entity.name)}/update", modelMap.get("saveAction"));
+		
+		Mockito.verify(messageHelper).addException(model, "${fn.uncapitalize($entity.name)}.error.update", exception);
+		
+#foreach( $ref in $referencedNonPKEntities )
+		@SuppressWarnings("unchecked")
+		List<${ref}ListItem> ${fn.uncapitalize(${ref})}ListItems = (List<${ref}ListItem>) modelMap.get("listOf${ref}Items");
+		assertEquals(2, ${fn.uncapitalize(${ref})}ListItems.size());
+		
+#end
+	}
+	
+
+	@Test
+	public void deleteOK() {
+		// Given
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+#foreach( $attr in $entity.keyAttributes )
+		${attr.type} ${attr.name} = ${fn.uncapitalize($entity.name)}.${attr.getter}();
+#end
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.delete(redirectAttributes, ${pkElementsVariables});
+		
+		// Then
+		verify(${fn.uncapitalize($entity.name)}Service).delete(${pkElementsVariables});
+		assertEquals("redirect:/${fn.uncapitalize($entity.name)}", viewName);
+		Mockito.verify(messageHelper).addMessage(redirectAttributes, new Message(MessageType.SUCCESS,"delete.ok"));
+	}
+
+	@Test
+	public void deleteException() {
+		// Given
+		RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+		
+		${entity.name} ${fn.uncapitalize($entity.name)} = ${fn.uncapitalize($entity.name)}FactoryForTest.new${entity.name}();
+#foreach( $attr in $entity.keyAttributes )
+		${attr.type} ${attr.name} = ${fn.uncapitalize($entity.name)}.${attr.getter}();
+#end
+		
+		Exception exception = new RuntimeException("test exception");
+		doThrow(exception).when(${fn.uncapitalize($entity.name)}Service).delete(${pkElementsVariables});
+		
+		// When
+		String viewName = ${fn.uncapitalize($entity.name)}Controller.delete(redirectAttributes, ${pkElementsVariables});
+		
+		// Then
+		verify(${fn.uncapitalize($entity.name)}Service).delete(${pkElementsVariables});
+		assertEquals("redirect:/${fn.uncapitalize($entity.name)}", viewName);
+		Mockito.verify(messageHelper).addException(redirectAttributes, "${fn.uncapitalize($entity.name)}.error.delete", exception);
+	}
+	
+	
+}

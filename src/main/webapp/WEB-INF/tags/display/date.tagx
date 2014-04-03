@@ -1,0 +1,16 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:s="http://www.springframework.org/tags" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:joda="http://www.joda.org/joda/time/tags" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" version="2.0">
+	<jsp:output omit-xml-declaration="yes" />
+
+	<jsp:directive.attribute name="value" type="java.util.Date" required="true" rtexprvalue="true" description="date" />
+	<jsp:directive.attribute name="dateFormatPattern" type="java.lang.String" required="false" rtexprvalue="true" description="pattern" />
+	
+	<!-- default values -->
+	
+	<c:set var="dateFormatPattern">
+		<s:message code="date_format_pattern" />
+	</c:set>
+	
+	<!-- content -->
+	<fmt:formatDate value="${value}" pattern="${dateFormatPattern}" />
+		
+</jsp:root>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databases defaultId="0" maxId="4">
+<db dialect="org.hibernate.dialect.DerbyDialect" driver="org.apache.derby.jdbc.ClientDriver" id="0" isolationLevel="" name="DERBY" poolSize="1" typeName="DERBY" url="jdbc:derby://localhost:1527/bookstore">
+<property name="user" value="root"/>
+<property name="password" value="admin"/>
+<metadata catalog="" schema="ROOT" table-name-pattern="%" table-types="TABLE"/>
+</db>
+</databases>

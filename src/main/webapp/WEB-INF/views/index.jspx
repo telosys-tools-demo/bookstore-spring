@@ -1,0 +1,30 @@
+<div xmlns:s="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:directive.page contentType="text/html;charset=UTF-8" />
+<jsp:output omit-xml-declaration="yes" />
+	<s:message var="app_name" code="application_name" htmlEscape="false" />
+	<s:message var="title" code="welcome_titlepane" arguments="${app_name}" htmlEscape="false" />
+    
+    <div class="container">
+		<h3>
+			<s:message code="welcome_h3" arguments="${app_name}" />
+		</h3>
+      
+		<ul class="entity">
+            <li><a href="author">Author</a></li>
+            <li><a href="badge">Badge</a></li>
+            <li><a href="book">Book</a></li>
+            <li><a href="bookOrder">BookOrder</a></li>
+            <li><a href="bookOrderItem">BookOrderItem</a></li>
+            <li><a href="country">Country</a></li>
+            <li><a href="customer">Customer</a></li>
+            <li><a href="employee">Employee</a></li>
+            <li><a href="employeeGroup">EmployeeGroup</a></li>
+            <li><a href="publisher">Publisher</a></li>
+            <li><a href="review">Review</a></li>
+            <li><a href="shop">Shop</a></li>
+            <li><a href="synopsis">Synopsis</a></li>
+            <li><a href="workgroup">Workgroup</a></li>
+	    </ul>
+
+    </div> <!-- /container -->
+</div>

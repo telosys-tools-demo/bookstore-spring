@@ -1,0 +1,21 @@
+#set( $_ = "$" )
+##--------------------------------------------------------------------------------------------------------
+<div xmlns:s="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:directive.page contentType="text/html;charset=UTF-8" />
+<jsp:output omit-xml-declaration="yes" />
+	<s:message var="app_name" code="application_name" htmlEscape="false" />
+	<s:message var="title" code="welcome_titlepane" arguments="${_}{app_name}" htmlEscape="false" />
+    
+    <div class="container">
+		<h3>
+			<s:message code="welcome_h3" arguments="${_}{app_name}" />
+		</h3>
+      
+		<ul class="entity">
+#foreach( $entity in $selectedEntities )
+            <li><a href="${fn.uncapitalize($entity.name)}">${entity.name}</a></li>
+#end
+	    </ul>
+
+    </div> <!-- /container -->
+</div>

@@ -1,0 +1,20 @@
+#if ( $databases.hasDatabase( $model.databaseId ) )
+#set($database = $databases.getDatabase( $model.databaseId )) 
+database.database=$database.type
+database.databasePlatform=$database.dialect
+database.showSql=true
+database.generateDdl=true
+database.driverClassName=$database.driverClass
+database.url=$database.jdbcUrl
+database.username=$database.user
+database.password=$database.password
+#else
+database.database=
+database.databasePlatform=
+database.showSql=true
+database.generateDdl=true
+database.driverClassName=
+database.url=jdbc\:
+database.username=
+database.password=
+#end

@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>$fn.get("MAVEN_GROUP_ID","to.be.defined")</groupId>
+	<artifactId>$fn.get("MAVEN_ARTIFACT_ID","to.be.defined")</artifactId>
+	<version>$fn.get("PROJECT_VERSION","to.be.defined")</version>
+	<packaging>jar</packaging>
+
+	<dependencies>
+
+		<!-- Add the JDBC driver here -->
+
+		<!-- Insert contents of : pom_dependencies_common.txt -->
+
+		<!-- Insert contents of : pom_dependencies_persistence.txt -->
+
+	</dependencies>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>${DOLLAR}{java.version}</source>
+					<target>${DOLLAR}{java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

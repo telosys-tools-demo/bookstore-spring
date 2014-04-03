@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Telosys Database Repository --><root>
+<tableList databaseId="0" databaseName="DERBY" databaseProductName="Apache Derby" generation="2014-04-03 19:37:16">
+<table catalog="" databaseType="TABLE" javaBean="Author" name="AUTHOR" schema="ROOT">
+<column dbDefaultValue="" dbName="ID" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="FIRST_NAME" dbNotNull="false" dbPosition="2" dbSize="40" dbTypeName="VARCHAR" inputType="text" javaName="firstName" javaType="java.lang.String" jdbcTypeCode="12" label="First Name" maxLength="40" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="LAST_NAME" dbNotNull="false" dbPosition="3" dbSize="40" dbTypeName="VARCHAR" inputType="text" javaName="lastName" javaType="java.lang.String" jdbcTypeCode="12" label="Last Name" maxLength="40" notNull="false" selected="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK001" id="LINK_FK_FK_BOOK001_I" inverseSideOf="LINK_FK_FK_BOOK001_O" javaName="listOfBook" javaType="java.util.List" joinTableName="" mappedBy="author" optional="UNDEFINED" owningSide="false" sourceTableName="AUTHOR" targetEntity="Book" targetTableName="BOOK" used="true"/>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Badge" name="BADGE" schema="ROOT">
+<column dbDefaultValue="" dbName="BADGE_NUMBER" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="badgeNumber" javaType="java.lang.Integer" jdbcTypeCode="4" label="Badge Number" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="AUTHORIZATION_LEVEL" dbNotNull="true" dbPosition="2" dbSize="5" dbTypeName="SMALLINT" inputType="number" javaName="authorizationLevel" javaType="java.lang.Short" jdbcTypeCode="5" label="Authorization Level" notNull="true" selected="true"/>
+<column dateType="D" dbDefaultValue="" dbName="END_OF_VALIDITY" dbNotNull="false" dbPosition="3" dbSize="10" dbTypeName="DATE" inputType="date" javaName="endOfValidity" javaType="java.util.Date" jdbcTypeCode="91" label="End Of Validity" notNull="false" selected="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_EMPLOYEE002" id="LINK_FK_FK_EMPLOYEE002_I" inverseSideOf="LINK_FK_FK_EMPLOYEE002_O" javaName="listOfEmployee" javaType="java.util.List" joinTableName="" mappedBy="badge" optional="UNDEFINED" owningSide="false" sourceTableName="BADGE" targetEntity="Employee" targetTableName="EMPLOYEE" used="true"/>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Book" name="BOOK" schema="ROOT">
+<column dbDefaultValue="" dbName="ID" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="PUBLISHER_ID" dbNotNull="true" dbPosition="2" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="publisherId" javaType="java.lang.Integer" jdbcTypeCode="4" label="Publisher Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="AUTHOR_ID" dbNotNull="true" dbPosition="3" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="authorId" javaType="java.lang.Integer" jdbcTypeCode="4" label="Author Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="ISBN" dbNotNull="true" dbPosition="4" dbSize="13" dbTypeName="VARCHAR" inputType="text" javaName="isbn" javaType="java.lang.String" jdbcTypeCode="12" label="Isbn" maxLength="13" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="TITLE" dbNotNull="false" dbPosition="5" dbSize="160" dbTypeName="VARCHAR" inputType="text" javaName="title" javaType="java.lang.String" jdbcTypeCode="12" label="Title" maxLength="160" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="PRICE" dbNotNull="false" dbPosition="6" dbSize="10" dbTypeName="DECIMAL" inputType="number" javaName="price" javaType="java.math.BigDecimal" jdbcTypeCode="3" label="Price" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="QUANTITY" dbNotNull="false" dbPosition="7" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="quantity" javaType="java.lang.Integer" jdbcTypeCode="4" label="Quantity" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="DISCOUNT" dbNotNull="false" dbPosition="8" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="discount" javaType="java.lang.Integer" jdbcTypeCode="4" label="Discount" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="AVAILABILITY" dbNotNull="false" dbPosition="9" dbSize="5" dbTypeName="SMALLINT" inputType="number" javaName="availability" javaType="java.lang.Short" jdbcTypeCode="5" label="Availability" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="BEST_SELLER" dbNotNull="false" dbPosition="10" dbSize="5" dbTypeName="SMALLINT" inputType="number" javaName="bestSeller" javaType="java.lang.Short" jdbcTypeCode="5" label="Best Seller" notNull="false" selected="true"/>
+<fk name="FK_BOOK001">
+<fkcol colname="AUTHOR_ID" colref="ID" deferrable="7" deleterule="3" sequence="1" tablename="BOOK" tableref="AUTHOR" updaterule="3"/>
+</fk>
+<fk name="FK_BOOK002">
+<fkcol colname="PUBLISHER_ID" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="BOOK" tableref="PUBLISHER" updaterule="3"/>
+</fk>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK001" id="LINK_FK_FK_BOOK001_O" inverseSideOf="" javaName="author" javaType="Author" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="BOOK" targetEntity="Author" targetTableName="AUTHOR" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="AUTHOR_ID" nullable="true" referencedColumnName="ID" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER_ITEM002" id="LINK_FK_FK_BOOK_ORDER_ITEM002_I" inverseSideOf="LINK_FK_FK_BOOK_ORDER_ITEM002_O" javaName="listOfBookOrderItem" javaType="java.util.List" joinTableName="" mappedBy="book" optional="UNDEFINED" owningSide="false" sourceTableName="BOOK" targetEntity="BookOrderItem" targetTableName="BOOK_ORDER_ITEM" used="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_SYNOPSIS001" id="LINK_FK_FK_SYNOPSIS001_I" inverseSideOf="LINK_FK_FK_SYNOPSIS001_O" javaName="listOfSynopsis" javaType="java.util.List" joinTableName="" mappedBy="book" optional="UNDEFINED" owningSide="false" sourceTableName="BOOK" targetEntity="Synopsis" targetTableName="SYNOPSIS" used="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_REVIEW002" id="LINK_FK_FK_REVIEW002_I" inverseSideOf="LINK_FK_FK_REVIEW002_O" javaName="listOfReview" javaType="java.util.List" joinTableName="" mappedBy="book" optional="UNDEFINED" owningSide="false" sourceTableName="BOOK" targetEntity="Review" targetTableName="REVIEW" used="true"/>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK002" id="LINK_FK_FK_BOOK002_O" inverseSideOf="" javaName="publisher" javaType="Publisher" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="BOOK" targetEntity="Publisher" targetTableName="PUBLISHER" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="PUBLISHER_ID" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="BookOrder" name="BOOK_ORDER" schema="ROOT">
+<column dbDefaultValue="" dbName="ID" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="id" javaType="java.lang.Integer" jdbcTypeCode="4" label="Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="SHOP_CODE" dbNotNull="true" dbPosition="2" dbSize="3" dbTypeName="VARCHAR" inputType="text" javaName="shopCode" javaType="java.lang.String" jdbcTypeCode="12" label="Shop Code" maxLength="3" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="CUSTOMER_CODE" dbNotNull="true" dbPosition="3" dbSize="5" dbTypeName="VARCHAR" inputType="text" javaName="customerCode" javaType="java.lang.String" jdbcTypeCode="12" label="Customer Code" maxLength="5" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="EMPLOYEE_CODE" dbNotNull="true" dbPosition="4" dbSize="4" dbTypeName="VARCHAR" inputType="text" javaName="employeeCode" javaType="java.lang.String" jdbcTypeCode="12" label="Employee Code" maxLength="4" notEmpty="true" notNull="true" selected="true"/>
+<column dateType="D" dbDefaultValue="" dbName="DATE" dbNotNull="false" dbPosition="5" dbSize="10" dbTypeName="DATE" inputType="date" javaName="date" javaType="java.util.Date" jdbcTypeCode="91" label="Date" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="STATE" dbNotNull="false" dbPosition="6" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="state" javaType="java.lang.Integer" jdbcTypeCode="4" label="State" notNull="false" selected="true"/>
+<fk name="FK_BOOK_ORDER001">
+<fkcol colname="SHOP_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="BOOK_ORDER" tableref="SHOP" updaterule="3"/>
+</fk>
+<fk name="FK_BOOK_ORDER002">
+<fkcol colname="CUSTOMER_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="BOOK_ORDER" tableref="CUSTOMER" updaterule="3"/>
+</fk>
+<fk name="FK_BOOK_ORDER003">
+<fkcol colname="EMPLOYEE_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="BOOK_ORDER" tableref="EMPLOYEE" updaterule="3"/>
+</fk>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER001" id="LINK_FK_FK_BOOK_ORDER001_O" inverseSideOf="" javaName="shop" javaType="Shop" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="BOOK_ORDER" targetEntity="Shop" targetTableName="SHOP" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="SHOP_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER003" id="LINK_FK_FK_BOOK_ORDER003_O" inverseSideOf="" javaName="employee" javaType="Employee" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="BOOK_ORDER" targetEntity="Employee" targetTableName="EMPLOYEE" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="EMPLOYEE_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER002" id="LINK_FK_FK_BOOK_ORDER002_O" inverseSideOf="" javaName="customer" javaType="Customer" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="BOOK_ORDER" targetEntity="Customer" targetTableName="CUSTOMER" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="CUSTOMER_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER_ITEM001" id="LINK_FK_FK_BOOK_ORDER_ITEM001_I" inverseSideOf="LINK_FK_FK_BOOK_ORDER_ITEM001_O" javaName="listOfBookOrderItem" javaType="java.util.List" joinTableName="" mappedBy="bookOrder" optional="UNDEFINED" owningSide="false" sourceTableName="BOOK_ORDER" targetEntity="BookOrderItem" targetTableName="BOOK_ORDER_ITEM" used="true"/>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="BookOrderItem" name="BOOK_ORDER_ITEM" schema="ROOT">
+<column dbDefaultValue="" dbForeignKey="true" dbName="BOOK_ORDER_ID" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="bookOrderId" javaType="java.lang.Integer" jdbcTypeCode="4" label="Book Order Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="BOOK_ID" dbNotNull="true" dbPosition="2" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="bookId" javaType="java.lang.Integer" jdbcTypeCode="4" label="Book Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="QUANTITY" dbNotNull="true" dbPosition="3" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="quantity" javaType="java.lang.Integer" jdbcTypeCode="4" label="Quantity" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="PRICE" dbNotNull="true" dbPosition="4" dbSize="10" dbTypeName="DECIMAL" inputType="number" javaName="price" javaType="java.math.BigDecimal" jdbcTypeCode="3" label="Price" notNull="true" selected="true"/>
+<fk name="FK_BOOK_ORDER_ITEM001">
+<fkcol colname="BOOK_ORDER_ID" colref="ID" deferrable="7" deleterule="3" sequence="1" tablename="BOOK_ORDER_ITEM" tableref="BOOK_ORDER" updaterule="3"/>
+</fk>
+<fk name="FK_BOOK_ORDER_ITEM002">
+<fkcol colname="BOOK_ID" colref="ID" deferrable="7" deleterule="3" sequence="1" tablename="BOOK_ORDER_ITEM" tableref="BOOK" updaterule="3"/>
+</fk>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER_ITEM001" id="LINK_FK_FK_BOOK_ORDER_ITEM001_O" inverseSideOf="" javaName="bookOrder" javaType="BookOrder" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="BOOK_ORDER_ITEM" targetEntity="BookOrder" targetTableName="BOOK_ORDER" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="BOOK_ORDER_ID" nullable="true" referencedColumnName="ID" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER_ITEM002" id="LINK_FK_FK_BOOK_ORDER_ITEM002_O" inverseSideOf="" javaName="book" javaType="Book" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="BOOK_ORDER_ITEM" targetEntity="Book" targetTableName="BOOK" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="BOOK_ID" nullable="true" referencedColumnName="ID" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Country" name="COUNTRY" schema="ROOT">
+<column dbDefaultValue="" dbName="CODE" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="2" dbTypeName="VARCHAR" inputType="text" javaName="code" javaType="java.lang.String" jdbcTypeCode="12" label="Code" maxLength="2" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="NAME" dbNotNull="false" dbPosition="2" dbSize="45" dbTypeName="VARCHAR" inputType="text" javaName="name" javaType="java.lang.String" jdbcTypeCode="12" label="Name" maxLength="45" notNull="false" selected="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_SHOP001" id="LINK_FK_FK_SHOP001_I" inverseSideOf="LINK_FK_FK_SHOP001_O" javaName="listOfShop" javaType="java.util.List" joinTableName="" mappedBy="country" optional="UNDEFINED" owningSide="false" sourceTableName="COUNTRY" targetEntity="Shop" targetTableName="SHOP" used="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_PUBLISHER001" id="LINK_FK_FK_PUBLISHER001_I" inverseSideOf="LINK_FK_FK_PUBLISHER001_O" javaName="listOfPublisher" javaType="java.util.List" joinTableName="" mappedBy="country" optional="UNDEFINED" owningSide="false" sourceTableName="COUNTRY" targetEntity="Publisher" targetTableName="PUBLISHER" used="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_CUSTOMER001" id="LINK_FK_FK_CUSTOMER001_I" inverseSideOf="LINK_FK_FK_CUSTOMER001_O" javaName="listOfCustomer" javaType="java.util.List" joinTableName="" mappedBy="country" optional="UNDEFINED" owningSide="false" sourceTableName="COUNTRY" targetEntity="Customer" targetTableName="CUSTOMER" used="true"/>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Customer" name="CUSTOMER" schema="ROOT">
+<column dbDefaultValue="" dbName="CODE" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="5" dbTypeName="VARCHAR" inputType="text" javaName="code" javaType="java.lang.String" jdbcTypeCode="12" label="Code" maxLength="5" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="COUNTRY_CODE" dbNotNull="true" dbPosition="2" dbSize="2" dbTypeName="VARCHAR" inputType="text" javaName="countryCode" javaType="java.lang.String" jdbcTypeCode="12" label="Country Code" maxLength="2" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="FIRST_NAME" dbNotNull="false" dbPosition="3" dbSize="40" dbTypeName="VARCHAR" inputType="text" javaName="firstName" javaType="java.lang.String" jdbcTypeCode="12" label="First Name" maxLength="40" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="LAST_NAME" dbNotNull="false" dbPosition="4" dbSize="40" dbTypeName="VARCHAR" inputType="text" javaName="lastName" javaType="java.lang.String" jdbcTypeCode="12" label="Last Name" maxLength="40" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="LOGIN" dbNotNull="true" dbPosition="5" dbSize="20" dbTypeName="VARCHAR" inputType="text" javaName="login" javaType="java.lang.String" jdbcTypeCode="12" label="Login" maxLength="20" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="PASSWORD" dbNotNull="false" dbPosition="6" dbSize="20" dbTypeName="VARCHAR" inputType="text" javaName="password" javaType="java.lang.String" jdbcTypeCode="12" label="Password" maxLength="20" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="AGE" dbNotNull="false" dbPosition="7" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="age" javaType="java.lang.Integer" jdbcTypeCode="4" label="Age" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="CITY" dbNotNull="false" dbPosition="8" dbSize="45" dbTypeName="VARCHAR" inputType="text" javaName="city" javaType="java.lang.String" jdbcTypeCode="12" label="City" maxLength="45" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="ZIP_CODE" dbNotNull="false" dbPosition="9" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="zipCode" javaType="java.lang.Integer" jdbcTypeCode="4" label="Zip Code" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="PHONE" dbNotNull="false" dbPosition="10" dbSize="20" dbTypeName="VARCHAR" inputType="text" javaName="phone" javaType="java.lang.String" jdbcTypeCode="12" label="Phone" maxLength="20" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="REVIEWER" dbNotNull="false" dbPosition="11" dbSize="5" dbTypeName="SMALLINT" inputType="number" javaName="reviewer" javaType="java.lang.Short" jdbcTypeCode="5" label="Reviewer" notNull="false" selected="true"/>
+<fk name="FK_CUSTOMER001">
+<fkcol colname="COUNTRY_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="CUSTOMER" tableref="COUNTRY" updaterule="3"/>
+</fk>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_REVIEW001" id="LINK_FK_FK_REVIEW001_I" inverseSideOf="LINK_FK_FK_REVIEW001_O" javaName="listOfReview" javaType="java.util.List" joinTableName="" mappedBy="customer" optional="UNDEFINED" owningSide="false" sourceTableName="CUSTOMER" targetEntity="Review" targetTableName="REVIEW" used="true"/>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER002" id="LINK_FK_FK_BOOK_ORDER002_I" inverseSideOf="LINK_FK_FK_BOOK_ORDER002_O" javaName="listOfBookOrder" javaType="java.util.List" joinTableName="" mappedBy="customer" optional="UNDEFINED" owningSide="false" sourceTableName="CUSTOMER" targetEntity="BookOrder" targetTableName="BOOK_ORDER" used="true"/>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_CUSTOMER001" id="LINK_FK_FK_CUSTOMER001_O" inverseSideOf="" javaName="country" javaType="Country" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="CUSTOMER" targetEntity="Country" targetTableName="COUNTRY" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="COUNTRY_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Employee" name="EMPLOYEE" schema="ROOT">
+<column dbDefaultValue="" dbName="CODE" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="4" dbTypeName="VARCHAR" inputType="text" javaName="code" javaType="java.lang.String" jdbcTypeCode="12" label="Code" maxLength="4" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="SHOP_CODE" dbNotNull="true" dbPosition="2" dbSize="3" dbTypeName="VARCHAR" inputType="text" javaName="shopCode" javaType="java.lang.String" jdbcTypeCode="12" label="Shop Code" maxLength="3" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="FIRST_NAME" dbNotNull="false" dbPosition="3" dbSize="40" dbTypeName="VARCHAR" inputType="text" javaName="firstName" javaType="java.lang.String" jdbcTypeCode="12" label="First Name" maxLength="40" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="LAST_NAME" dbNotNull="true" dbPosition="4" dbSize="40" dbTypeName="VARCHAR" inputType="text" javaName="lastName" javaType="java.lang.String" jdbcTypeCode="12" label="Last Name" maxLength="40" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="MANAGER" dbNotNull="false" dbPosition="5" dbSize="5" dbTypeName="SMALLINT" inputType="number" javaName="manager" javaType="java.lang.Short" jdbcTypeCode="5" label="Manager" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="BADGE_NUMBER" dbNotNull="false" dbPosition="6" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="badgeNumber" javaType="java.lang.Integer" jdbcTypeCode="4" label="Badge Number" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="EMAIL" dbNotNull="false" dbPosition="7" dbSize="60" dbTypeName="VARCHAR" inputType="text" javaName="email" javaType="java.lang.String" jdbcTypeCode="12" label="Email" maxLength="60" notNull="false" selected="true"/>
+<fk name="FK_EMPLOYEE001">
+<fkcol colname="SHOP_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="EMPLOYEE" tableref="SHOP" updaterule="3"/>
+</fk>
+<fk name="FK_EMPLOYEE002">
+<fkcol colname="BADGE_NUMBER" colref="BADGE_NUMBER" deferrable="7" deleterule="3" sequence="1" tablename="EMPLOYEE" tableref="BADGE" updaterule="3"/>
+</fk>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_SHOP002" id="LINK_FK_FK_SHOP002_I" inverseSideOf="LINK_FK_FK_SHOP002_O" javaName="listOfShop" javaType="java.util.List" joinTableName="" mappedBy="employee" optional="UNDEFINED" owningSide="false" sourceTableName="EMPLOYEE" targetEntity="Shop" targetTableName="SHOP" used="true"/>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_EMPLOYEE001" id="LINK_FK_FK_EMPLOYEE001_O" inverseSideOf="" javaName="shop" javaType="Shop" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="EMPLOYEE" targetEntity="Shop" targetTableName="SHOP" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="SHOP_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="ManyToMany" cascade="" fetch="DEFAULT" foreignKeyName="" id="LINK_JT_ROOT.EMPLOYEE_GROUP_O" inverseSideOf="" javaName="listOfWorkgroup" javaType="java.util.List" joinTableName="EMPLOYEE_GROUP" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="EMPLOYEE" targetEntity="Workgroup" targetTableName="WORKGROUP" used="true">
+<joinTable name="EMPLOYEE_GROUP">
+<joinColumns>
+<joinColumn insertable="false" name="EMPLOYEE_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+<inverseJoinColumns>
+<joinColumn insertable="false" name="GROUP_ID" nullable="true" referencedColumnName="ID" unique="false" updatable="false"/>
+</inverseJoinColumns>
+</joinTable>
+</link>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_EMPLOYEE002" id="LINK_FK_FK_EMPLOYEE002_O" inverseSideOf="" javaName="badge" javaType="Badge" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="EMPLOYEE" targetEntity="Badge" targetTableName="BADGE" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="BADGE_NUMBER" nullable="true" referencedColumnName="BADGE_NUMBER" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER003" id="LINK_FK_FK_BOOK_ORDER003_I" inverseSideOf="LINK_FK_FK_BOOK_ORDER003_O" javaName="listOfBookOrder" javaType="java.util.List" joinTableName="" mappedBy="employee" optional="UNDEFINED" owningSide="false" sourceTableName="EMPLOYEE" targetEntity="BookOrder" targetTableName="BOOK_ORDER" used="true"/>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="EmployeeGroup" name="EMPLOYEE_GROUP" schema="ROOT">
+<column dbDefaultValue="" dbForeignKey="true" dbName="EMPLOYEE_CODE" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="4" dbTypeName="VARCHAR" inputType="text" javaName="employeeCode" javaType="java.lang.String" jdbcTypeCode="12" label="Employee Code" maxLength="4" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="GROUP_ID" dbNotNull="true" dbPosition="2" dbPrimaryKey="true" dbSize="5" dbTypeName="SMALLINT" inputType="number" javaName="groupId" javaType="java.lang.Short" jdbcTypeCode="5" label="Group Id" notNull="true" selected="true"/>
+<fk name="SQL110928165543171">
+<fkcol colname="EMPLOYEE_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="EMPLOYEE_GROUP" tableref="EMPLOYEE" updaterule="3"/>
+</fk>
+<fk name="SQL110928165543172">
+<fkcol colname="GROUP_ID" colref="ID" deferrable="7" deleterule="3" sequence="1" tablename="EMPLOYEE_GROUP" tableref="WORKGROUP" updaterule="3"/>
+</fk>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Publisher" name="PUBLISHER" schema="ROOT">
+<column dbDefaultValue="" dbName="CODE" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="code" javaType="java.lang.Integer" jdbcTypeCode="4" label="Code" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="COUNTRY_CODE" dbNotNull="true" dbPosition="2" dbSize="2" dbTypeName="VARCHAR" inputType="text" javaName="countryCode" javaType="java.lang.String" jdbcTypeCode="12" label="Country Code" maxLength="2" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="NAME" dbNotNull="false" dbPosition="3" dbSize="45" dbTypeName="VARCHAR" inputType="text" javaName="name" javaType="java.lang.String" jdbcTypeCode="12" label="Name" maxLength="45" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="EMAIL" dbNotNull="false" dbPosition="4" dbSize="45" dbTypeName="VARCHAR" inputType="text" javaName="email" javaType="java.lang.String" jdbcTypeCode="12" label="Email" maxLength="45" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="CONTACT" dbNotNull="false" dbPosition="5" dbSize="45" dbTypeName="VARCHAR" inputType="text" javaName="contact" javaType="java.lang.String" jdbcTypeCode="12" label="Contact" maxLength="45" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="CITY" dbNotNull="false" dbPosition="6" dbSize="45" dbTypeName="VARCHAR" inputType="text" javaName="city" javaType="java.lang.String" jdbcTypeCode="12" label="City" maxLength="45" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="ZIP_CODE" dbNotNull="false" dbPosition="7" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="zipCode" javaType="java.lang.Integer" jdbcTypeCode="4" label="Zip Code" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="PHONE" dbNotNull="false" dbPosition="8" dbSize="14" dbTypeName="VARCHAR" inputType="text" javaName="phone" javaType="java.lang.String" jdbcTypeCode="12" label="Phone" maxLength="14" notNull="false" selected="true"/>
+<fk name="FK_PUBLISHER001">
+<fkcol colname="COUNTRY_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="PUBLISHER" tableref="COUNTRY" updaterule="3"/>
+</fk>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK002" id="LINK_FK_FK_BOOK002_I" inverseSideOf="LINK_FK_FK_BOOK002_O" javaName="listOfBook" javaType="java.util.List" joinTableName="" mappedBy="publisher" optional="UNDEFINED" owningSide="false" sourceTableName="PUBLISHER" targetEntity="Book" targetTableName="BOOK" used="true"/>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_PUBLISHER001" id="LINK_FK_FK_PUBLISHER001_O" inverseSideOf="" javaName="country" javaType="Country" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="PUBLISHER" targetEntity="Country" targetTableName="COUNTRY" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="COUNTRY_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Review" name="REVIEW" schema="ROOT">
+<column dbDefaultValue="" dbForeignKey="true" dbName="CUSTOMER_CODE" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="5" dbTypeName="VARCHAR" inputType="text" javaName="customerCode" javaType="java.lang.String" jdbcTypeCode="12" label="Customer Code" maxLength="5" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="BOOK_ID" dbNotNull="true" dbPosition="2" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="bookId" javaType="java.lang.Integer" jdbcTypeCode="4" label="Book Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="REVIEW_TEXT" dbNotNull="false" dbPosition="3" dbSize="32700" dbTypeName="LONG VARCHAR" inputType="text" javaName="reviewText" javaType="java.lang.String" jdbcTypeCode="-1" label="Review Text" longText="true" maxLength="32700" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="REVIEW_NOTE" dbNotNull="false" dbPosition="4" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="reviewNote" javaType="java.lang.Integer" jdbcTypeCode="4" label="Review Note" notNull="false" selected="true"/>
+<column dateType="DT" dbDefaultValue="" dbName="CREATION" dbNotNull="false" dbPosition="5" dbSize="29" dbTypeName="TIMESTAMP" inputType="" javaName="creation" javaType="java.util.Date" jdbcTypeCode="93" label="Creation" notNull="false" selected="true"/>
+<column dateType="DT" dbDefaultValue="" dbName="LAST_UPDATE" dbNotNull="false" dbPosition="6" dbSize="29" dbTypeName="TIMESTAMP" inputType="" javaName="lastUpdate" javaType="java.util.Date" jdbcTypeCode="93" label="Last Update" notNull="false" selected="true"/>
+<fk name="FK_REVIEW001">
+<fkcol colname="CUSTOMER_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="REVIEW" tableref="CUSTOMER" updaterule="3"/>
+</fk>
+<fk name="FK_REVIEW002">
+<fkcol colname="BOOK_ID" colref="ID" deferrable="7" deleterule="3" sequence="1" tablename="REVIEW" tableref="BOOK" updaterule="3"/>
+</fk>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_REVIEW002" id="LINK_FK_FK_REVIEW002_O" inverseSideOf="" javaName="book" javaType="Book" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="REVIEW" targetEntity="Book" targetTableName="BOOK" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="BOOK_ID" nullable="true" referencedColumnName="ID" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_REVIEW001" id="LINK_FK_FK_REVIEW001_O" inverseSideOf="" javaName="customer" javaType="Customer" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="REVIEW" targetEntity="Customer" targetTableName="CUSTOMER" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="CUSTOMER_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Shop" name="SHOP" schema="ROOT">
+<column dbDefaultValue="" dbName="CODE" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="3" dbTypeName="VARCHAR" inputType="text" javaName="code" javaType="java.lang.String" jdbcTypeCode="12" label="Code" maxLength="3" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="NAME" dbNotNull="false" dbPosition="2" dbSize="80" dbTypeName="VARCHAR" inputType="text" javaName="name" javaType="java.lang.String" jdbcTypeCode="12" label="Name" maxLength="80" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="ADDRESS_1" dbNotNull="false" dbPosition="3" dbSize="80" dbTypeName="VARCHAR" inputType="text" javaName="address1" javaType="java.lang.String" jdbcTypeCode="12" label="Address 1" maxLength="80" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="ADDRESS_2" dbNotNull="false" dbPosition="4" dbSize="80" dbTypeName="VARCHAR" inputType="text" javaName="address2" javaType="java.lang.String" jdbcTypeCode="12" label="Address 2" maxLength="80" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="ZIP_CODE" dbNotNull="false" dbPosition="5" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="zipCode" javaType="java.lang.Integer" jdbcTypeCode="4" label="Zip Code" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="CITY" dbNotNull="false" dbPosition="6" dbSize="45" dbTypeName="VARCHAR" inputType="text" javaName="city" javaType="java.lang.String" jdbcTypeCode="12" label="City" maxLength="45" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="COUNTRY_CODE" dbNotNull="true" dbPosition="7" dbSize="2" dbTypeName="VARCHAR" inputType="text" javaName="countryCode" javaType="java.lang.String" jdbcTypeCode="12" label="Country Code" maxLength="2" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="PHONE" dbNotNull="false" dbPosition="8" dbSize="14" dbTypeName="VARCHAR" inputType="text" javaName="phone" javaType="java.lang.String" jdbcTypeCode="12" label="Phone" maxLength="14" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="EMAIL" dbNotNull="false" dbPosition="9" dbSize="50" dbTypeName="VARCHAR" inputType="text" javaName="email" javaType="java.lang.String" jdbcTypeCode="12" label="Email" maxLength="50" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbForeignKey="true" dbName="EXECUTIVE" dbNotNull="false" dbPosition="10" dbSize="4" dbTypeName="VARCHAR" inputType="text" javaName="executive" javaType="java.lang.String" jdbcTypeCode="12" label="Executive" maxLength="4" notNull="false" selected="true"/>
+<fk name="FK_SHOP001">
+<fkcol colname="COUNTRY_CODE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="SHOP" tableref="COUNTRY" updaterule="3"/>
+</fk>
+<fk name="FK_SHOP002">
+<fkcol colname="EXECUTIVE" colref="CODE" deferrable="7" deleterule="3" sequence="1" tablename="SHOP" tableref="EMPLOYEE" updaterule="3"/>
+</fk>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_SHOP002" id="LINK_FK_FK_SHOP002_O" inverseSideOf="" javaName="employee" javaType="Employee" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="SHOP" targetEntity="Employee" targetTableName="EMPLOYEE" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="EXECUTIVE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_BOOK_ORDER001" id="LINK_FK_FK_BOOK_ORDER001_I" inverseSideOf="LINK_FK_FK_BOOK_ORDER001_O" javaName="listOfBookOrder" javaType="java.util.List" joinTableName="" mappedBy="shop" optional="UNDEFINED" owningSide="false" sourceTableName="SHOP" targetEntity="BookOrder" targetTableName="BOOK_ORDER" used="true"/>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_SHOP001" id="LINK_FK_FK_SHOP001_O" inverseSideOf="" javaName="country" javaType="Country" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="SHOP" targetEntity="Country" targetTableName="COUNTRY" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="COUNTRY_CODE" nullable="true" referencedColumnName="CODE" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+<link cardinality="OneToMany" cascade="" fetch="DEFAULT" foreignKeyName="FK_EMPLOYEE001" id="LINK_FK_FK_EMPLOYEE001_I" inverseSideOf="LINK_FK_FK_EMPLOYEE001_O" javaName="listOfEmployee" javaType="java.util.List" joinTableName="" mappedBy="shop" optional="UNDEFINED" owningSide="false" sourceTableName="SHOP" targetEntity="Employee" targetTableName="EMPLOYEE" used="true"/>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Synopsis" name="SYNOPSIS" schema="ROOT">
+<column dbDefaultValue="" dbForeignKey="true" dbName="BOOK_ID" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="10" dbTypeName="INTEGER" inputType="number" javaName="bookId" javaType="java.lang.Integer" jdbcTypeCode="4" label="Book Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="SYNOPSIS" dbNotNull="false" dbPosition="2" dbSize="32700" dbTypeName="LONG VARCHAR" inputType="text" javaName="synopsis" javaType="java.lang.String" jdbcTypeCode="-1" label="Synopsis" longText="true" maxLength="32700" notNull="false" selected="true"/>
+<fk name="FK_SYNOPSIS001">
+<fkcol colname="BOOK_ID" colref="ID" deferrable="7" deleterule="3" sequence="1" tablename="SYNOPSIS" tableref="BOOK" updaterule="3"/>
+</fk>
+<link cardinality="ManyToOne" cascade="" fetch="DEFAULT" foreignKeyName="FK_SYNOPSIS001" id="LINK_FK_FK_SYNOPSIS001_O" inverseSideOf="" javaName="book" javaType="Book" joinTableName="" mappedBy="" optional="UNDEFINED" owningSide="true" sourceTableName="SYNOPSIS" targetEntity="Book" targetTableName="BOOK" used="true">
+<joinColumns>
+<joinColumn insertable="false" name="BOOK_ID" nullable="true" referencedColumnName="ID" unique="false" updatable="false"/>
+</joinColumns>
+</link>
+</table>
+<table catalog="" databaseType="TABLE" javaBean="Workgroup" name="WORKGROUP" schema="ROOT">
+<column dbDefaultValue="" dbName="ID" dbNotNull="true" dbPosition="1" dbPrimaryKey="true" dbSize="5" dbTypeName="SMALLINT" inputType="number" javaName="id" javaType="java.lang.Short" jdbcTypeCode="5" label="Id" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="NAME" dbNotNull="true" dbPosition="2" dbSize="40" dbTypeName="VARCHAR" inputType="text" javaName="name" javaType="java.lang.String" jdbcTypeCode="12" label="Name" maxLength="40" notEmpty="true" notNull="true" selected="true"/>
+<column dbDefaultValue="" dbName="DESCRIPTION" dbNotNull="true" dbPosition="3" dbSize="600" dbTypeName="VARCHAR" inputType="text" javaName="description" javaType="java.lang.String" jdbcTypeCode="12" label="Description" maxLength="600" notEmpty="true" notNull="true" selected="true"/>
+<column dateType="D" dbDefaultValue="" dbName="CREATION_DATE" dbNotNull="true" dbPosition="4" dbSize="10" dbTypeName="DATE" inputType="date" javaName="creationDate" javaType="java.util.Date" jdbcTypeCode="91" label="Creation Date" notNull="true" selected="true"/>
+<link cardinality="ManyToMany" cascade="" fetch="DEFAULT" foreignKeyName="" id="LINK_JT_ROOT.EMPLOYEE_GROUP_I" inverseSideOf="LINK_JT_ROOT.EMPLOYEE_GROUP_O" javaName="listOfEmployee" javaType="java.util.List" joinTableName="EMPLOYEE_GROUP" mappedBy="listOfWorkgroup" optional="UNDEFINED" owningSide="false" sourceTableName="WORKGROUP" targetEntity="Employee" targetTableName="EMPLOYEE" used="true"/>
+</table>
+</tableList>
+</root>

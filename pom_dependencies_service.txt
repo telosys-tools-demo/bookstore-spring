@@ -1,0 +1,7 @@
+
+        <dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>0.6.2</version>
+		</dependency>
+				

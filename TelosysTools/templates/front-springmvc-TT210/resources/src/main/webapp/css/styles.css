@@ -1,0 +1,19 @@
+.entity li {
+	margin: 5px;
+	font-size: 1.2em;
+}
+.entity li a {
+	display: block;
+	width: 200px;
+	height: 30px;
+}
+.entity li a:hover {
+	color: #cc4444;
+}
+.languages {
+	float: right;
+}
+.logo {
+	background: url("../images/logo.png") 0 5px no-repeat;
+	padding-left: 97px;
+}

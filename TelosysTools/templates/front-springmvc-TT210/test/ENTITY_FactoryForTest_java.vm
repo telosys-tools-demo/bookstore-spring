@@ -1,0 +1,47 @@
+#set($uncapitalizedEntityName = $fn.uncapitalize(${entity.name}) )
+## MAP : key = Java Type, value = MockValues method name 
+#set ( $map = { 
+  "byte"   : "nextByte()",     "java.lang.Byte"    : "nextByte()",  
+  "short"  : "nextShort()",    "java.lang.Short"   : "nextShort()", 
+  "int"    : "nextInteger()",  "java.lang.Integer" : "nextInteger()", 
+  "long"   : "nextLong()",     "java.lang.Long"    : "nextLong()", 
+  "float"  : "nextFloat()",    "java.lang.Float"   : "nextFloat()", 
+  "double" : "nextDouble()",   "java.lang.Double"  : "nextDouble()", 
+  "java.math.BigDecimal" : "nextBigDecimal()", 
+  "java.util.Date"       : "nextDate()", 
+  "java.sql.Date"        : "nextSqlDate()", 
+  "java.sql.Time"        : "nextSqlTime()", 
+  "java.sql.Timestamp"   : "nextSqlTimestamp()"
+} )
+#set( $package = ${target.javaPackageFromFolder($SRC)} )
+## ------------------------------------------------------------------
+#macro( mockMethod $field )
+#if ( $field.type == "String" )
+#set ( $methodName = "nextString($field.databaseSize)" )
+#else
+#set ( $methodName = $map.get(${field.fullType}) )
+#end
+${methodName}#end
+## ------------------------------------------------------------------
+package ${target.javaPackageFromFolder($TEST_SRC)};
+
+import ${ENTITY_PKG}.${entity.name};
+
+public class ${entity.name}FactoryForTest {
+
+	private MockValues mockValues = new MockValues();
+	
+	public ${entity.name} new${entity.name}() {
+
+#foreach( $attr in $entity.keyAttributes )
+		$attr.type $attr.name = mockValues.#mockMethod($attr);
+#end
+
+		${entity.name} ${uncapitalizedEntityName} = new ${entity.name}();
+#foreach( $attr in $entity.keyAttributes )
+		${uncapitalizedEntityName}.${attr.setter}($attr.name);
+#end
+		return ${uncapitalizedEntityName};
+	}
+	
+}
